@@ -1,0 +1,41 @@
+version: '3.9'
+
+services:
+  app:
+    build:
+      context: node
+    volumes:
+      - ./node:/usr/src/app
+    restart: unless-stopped
+    networks:
+      - my_app
+    depends_on:
+      - db
+
+  nginx:
+    build:
+      context: nginx
+    networks:
+      - my_app
+    ports: 
+      - "8080:80"
+    restart: unless-stopped
+    depends_on:
+      - app
+
+  db:
+    build:
+      context: mysql    
+    restart: always
+    tty: true
+    volumes:
+      - ./mysql-data:/var/lib/mysql
+    environment:
+      MYSQL_DATABASE: desafio
+      MYSQL_ROOT_PASSWORD: root
+    networks:
+      - my_app
+
+networks:
+  my_app:
+    driver: bridge
