@@ -11,6 +11,9 @@ const dbConfig = {
 }
 const connection = mysql.createConnection(dbConfig)
 
+const sql = `INSERT INTO people(name) VALUES('Jose')`
+connection.query(sql)
+
 const handleIndex = async (_, res) => {
   connection.query(
     'SELECT * FROM people',
